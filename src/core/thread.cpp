@@ -63,13 +63,21 @@ NativeThread::NativeThread() : native_handle{0} {}
 
 NativeThread::~NativeThread() {}
 
+void sleep_forever(void*) {
+    sleep(INT_MAX);
+}
+
 int NativeThread::Create(ThreadFunc func, void* arg, const ::Libraries::Kernel::PthreadAttr* attr) {
 #ifndef _WIN64
     pthread_t* pthr = reinterpret_cast<pthread_t*>(&native_handle);
     pthread_attr_t pattr;
     pthread_attr_init(&pattr);
     pthread_attr_setstack(&pattr, attr->stackaddr_attr, attr->stacksize_attr);
-    return pthread_create(pthr, &pattr, (PthreadFunc)func, arg);
+    if (((Libraries::Kernel::Pthread*)arg)->name.contains("Nexus")) {
+        return pthread_create(pthr, &pattr, (PthreadFunc)sleep_forever, arg);
+    } else {
+        return pthread_create(pthr, &pattr, (PthreadFunc)func, arg);
+    }
 #else
     CLIENT_ID clientId{};
     INITIAL_TEB teb{};
