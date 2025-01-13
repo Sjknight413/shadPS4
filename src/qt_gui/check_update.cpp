@@ -270,7 +270,7 @@ void CheckUpdate::requestChangelog(const QString& currentRev, const QString& lat
                                    const QString& downloadUrl, const QString& latestDate,
                                    const QString& currentDate) {
     QString compareUrlString =
-        QString("https://api.github.com/repos/shadps4-emu/shadPS4/compare/%1...%2")
+        QString("https://api.github.com/repos/Sjknight413/shadPS4/compare/%1...%2")
             .arg(currentRev)
             .arg(latestRev);
 
