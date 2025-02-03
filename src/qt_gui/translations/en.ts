@@ -125,6 +125,14 @@
 			<translation>Copy Serial</translation>
 		</message>
 		<message>
+			<source>Copy Version</source>
+			<translation>Copy Version</translation>
+		</message>
+		<message>
+			<source>Copy Size</source>
+			<translation>Copy Size</translation>		 
+	 </message>
+		<message>
 			<source>Copy All</source>
 			<translation>Copy All</translation>
 		</message>
@@ -1412,6 +1420,33 @@
 		<message>
 			<source>TB</source>
 			<translation>TB</translation>
+		</message>
+	</context>
+	<context>
+		<name>CompatibilityInfoClass</name>
+		<message>
+			<source>Unknown</source>
+			<translation>Unknown</translation>
+		</message>
+		<message>
+			<source>Nothing</source>
+			<translation>Nothing</translation>
+		</message>
+		<message>
+			<source>Boots</source>
+			<translation>Boots</translation>
+		</message>
+		<message>
+			<source>Menus</source>
+			<translation>Menus</translation>
+		</message>
+		<message>
+			<source>Ingame</source>
+			<translation>Ingame</translation>
+		</message>
+		<message>
+			<source>Playable</source>
+			<translation>Playable</translation>
 		</message>
 	</context>
 </TS>

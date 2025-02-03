@@ -115,9 +115,20 @@ execute_process(
   OUTPUT_STRIP_TRAILING_WHITESPACE
 )
 
-# Default to origin if there's no upstream set or if the command failed
+# If there's no upstream set or the command failed, check remote.pushDefault
 if (GIT_BRANCH_RESULT OR GIT_REMOTE_NAME STREQUAL "")
-  set(GIT_REMOTE_NAME "origin")
+  execute_process(
+    COMMAND git config --get remote.pushDefault
+    OUTPUT_VARIABLE GIT_REMOTE_NAME
+    RESULT_VARIABLE GIT_PUSH_DEFAULT_RESULT
+    ERROR_QUIET
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+  )
+  
+  # If remote.pushDefault is not set or fails, default to origin
+  if (GIT_PUSH_DEFAULT_RESULT OR GIT_REMOTE_NAME STREQUAL "")
+    set(GIT_REMOTE_NAME "origin")
+  endif()
 else()
   # Extract remote name if the output contains a remote/branch format
   string(FIND "${GIT_REMOTE_NAME}" "/" INDEX)
@@ -854,6 +865,10 @@ set(IMGUI src/imgui/imgui_config.h
 
 set(INPUT src/input/controller.cpp
           src/input/controller.h
+          src/input/input_handler.cpp
+          src/input/input_handler.h
+          src/input/input_mouse.cpp
+          src/input/input_mouse.h
 )
 
 set(EMULATOR src/emulator.cpp
@@ -903,6 +918,10 @@ set(QT_GUI src/qt_gui/about_dialog.cpp
            src/qt_gui/trophy_viewer.h
            src/qt_gui/elf_viewer.cpp
            src/qt_gui/elf_viewer.h
+           src/qt_gui/kbm_config_dialog.cpp
+           src/qt_gui/kbm_config_dialog.h
+           src/qt_gui/kbm_help_dialog.cpp
+           src/qt_gui/kbm_help_dialog.h
            src/qt_gui/main_window_themes.cpp
            src/qt_gui/main_window_themes.h
            src/qt_gui/settings_dialog.cpp

@@ -3,6 +3,7 @@
 
 #include <QDockWidget>
 #include <QKeyEvent>
+#include <QPlainTextEdit>
 #include <QProgressDialog>
 
 #include "about_dialog.h"
@@ -21,6 +22,9 @@
 #include "install_dir_select.h"
 #include "main_window.h"
 #include "settings_dialog.h"
+
+#include "kbm_config_dialog.h"
+
 #include "video_core/renderer_vulkan/vk_instance.h"
 #ifdef ENABLE_DISCORD_RPC
 #include "common/discord_rpc_handler.h"
@@ -58,12 +62,16 @@ bool MainWindow::Init() {
         window_title = fmt::format("shadPS4 v{}", Common::VERSION);
     } else {
         std::string remote_url(Common::g_scm_remote_url);
-        if (remote_url == "https://github.com/shadps4-emu/shadPS4.git" ||
-            remote_url.length() == 0) {
+        std::string remote_host;
+        try {
+            remote_host = remote_url.substr(19, remote_url.rfind('/') - 19);
+        } catch (...) {
+            remote_host = "unknown";
+        }
+        if (remote_host == "shadps4-emu" || remote_url.length() == 0) {
             window_title = fmt::format("shadPS4 v{} {} {}", Common::VERSION, Common::g_scm_branch,
                                        Common::g_scm_desc);
         } else {
-            std::string remote_host = remote_url.substr(19, remote_url.rfind('/') - 19);
             window_title = fmt::format("shadPS4 v{} {}/{} {}", Common::VERSION, remote_host,
                                        Common::g_scm_branch, Common::g_scm_desc);
         }
@@ -289,6 +297,12 @@ void MainWindow::CreateConnects() {
                 &MainWindow::RefreshGameTable);
 
         settingsDialog->exec();
+    });
+
+    // this is the editor for kbm keybinds
+    connect(ui->controllerButton, &QPushButton::clicked, this, [this]() {
+        EditorDialog* editorWindow = new EditorDialog(this);
+        editorWindow->exec(); // Show the editor window modally
     });
 
 #ifdef ENABLE_UPDATER
